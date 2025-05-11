@@ -1,12 +1,33 @@
-# React + Vite
+# 🧭 One Stop Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+One Stop Tracker is your all-in-one web app for tracking parameters, managing records, and staying organized with ease.  
+Built with **React**, **Tailwind CSS**, and **modern UI components**, it offers a fast, responsive, and clean user experience.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Screenshot 2025-05-11 133819](https://github.com/user-attachments/assets/68002321-93b2-4c5f-8f05-213aa9f108e7)
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+> 📱 Responsive | 🎯 Accurate | 🌙 Dark Themed | ⚡ Fast
+
+---
+
+## 🚀 Features
+
+- 📊 Record tracking with custom units
+- 🧮 Date-based parameter history
+- 📅 Clean, minimal UI with light/dark contrast
+- 💾 Persistent storage (or backend-ready)
+- 📱 Mobile responsive
+
+---
+
+## 📸 Screenshots
+
+| Chart Page | Add Record Modal |
+|----------------|------------------|
+| ![Dashboard](https://github.com/user-attachments/assets/125bb8f8-0930-4d17-ae7d-94e7c87c36a7) | ![Add Record](https://github.com/user-attachments/assets/6ddf2812-4bd2-4b7a-b4d6-ecb4e60627f4) |
+
+---
+
