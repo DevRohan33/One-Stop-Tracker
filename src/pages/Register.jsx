@@ -1,102 +1,160 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/superbaseClient";
+import { toast } from "react-hot-toast"; // Install with: npm install react-hot-toast
 
 export default function RegisterPage() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const handelLoginClick =() => {
-        navigate('/login')
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const { email, password, name } = formData;
+
+    if (!name || !email || !password) {
+      setError("Please fill in all fields");
+      setLoading(false);
+      return;
     }
-    const handelRegister =() => {
-        navigate('/')
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name, // Changed to full_name as it's more standard
+          },
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // Registration successful
+      toast.success("Registration successful! Please check your email to confirm your account.");
+      setRegistrationSuccess(true);
+      
+      // Auto-navigate to login after 3 seconds
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+
+    } catch (error) {
+      setError(error.message);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
   return (
-    <section
-      className="min-h-screen flex items-center justify-center"
-      style={{
-        background: "linear-gradient(to right, #0f2027, #203a43, #2c5364)",
-      }}
-    >
-      <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden bg-neutral-800">
-        {/* Left Panel */}
-        <div className="w-full lg:w-1/2 p-10 text-white">
-          <div className="text-center mb-10">
-            <img
-              className="mx-auto w-24 mb-4"
-              src="/logo.png"
-              alt="logo"
-            />
-            <h2 className="text-2xl font-bold">Create an Account</h2>
+    <div className="min-h-screen flex items-center justify-center p-10 bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
+      <div className="w-full max-w-[480px] bg-[rgba(121, 33, 141, 0.49)] p-12 pt-16 pb-10 rounded-2xl shadow-xl backdrop-blur-lg flex flex-col justify-center items-center">
+        <h1 className="text-center text-4xl tracking-widest font-semibold mb-10 text-white">UniTrax</h1>
+        
+        {registrationSuccess ? (
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-green-400 mb-4">Registration Successful!</h2>
+            <p className="text-white mb-6">
+              We've sent a confirmation email to <span className="font-bold">{formData.email}</span>.
+              Please verify your email to complete registration.
+            </p>
+            <p className="text-gray-300">You'll be redirected to login shortly...</p>
           </div>
+        ) : (
+          <>
+            <form onSubmit={handleRegister} className="space-y-3 w-full">
+              <div>
+                <label className="block text-sm text-white mb-1">Your Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter your Name"
+                  className="w-full p-3 rounded-lg bg-[#1e1e2f] text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-white mb-1">Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  className="w-full p-3 rounded-lg bg-[#1e1e2f] text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-white mb-1">Password</label>
+                <input
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  className="w-full p-3 rounded-lg bg-[#1e1e2f] text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 outline-none"
+                />
+              </div>
 
-          <form>
-            {/* Name */}
-            <div className="mb-4">
-              <label className="block text-sm mb-1">Your Name</label>
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                className="w-full rounded-md px-4 py-2 bg-neutral-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
+              {error && <p className="text-red-400 mt-4">{error}</p>}
 
-            {/* Email */}
-            <div className="mb-4">
-              <label className="block text-sm mb-1">Email</label>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full rounded-md px-4 py-2 bg-neutral-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
-
-            {/* Password */}
-            <div className="mb-6">
-              <label className="block text-sm mb-1">Password</label>
-              <input
-                type="password"
-                placeholder="Create a password"
-                className="w-full rounded-md px-4 py-2 bg-neutral-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full rounded-md bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 py-2 text-white font-semibold uppercase shadow-md hover:shadow-lg transition"
-              onClick={handelRegister}
-            >
-              Register
-            </button>
-
-            <div className="mt-6 flex items-center justify-between">
-              <p className="text-sm">Already have an account?</p>
               <button
-                type="button"
-                className="rounded border border-white px-4 py-1 text-xs uppercase text-white hover:bg-white hover:text-neutral-800 transition"
-                onClick={handelLoginClick}
+                type="submit"
+                disabled={loading}
+                className="mt-8 w-full py-3 rounded-lg font-bold text-white bg-gradient-to-r from-cyan-400 to-fuchsia-600 hover:from-cyan-300 hover:to-fuchsia-500 transition-all shadow-lg disabled:opacity-70"
+              >
+                {loading ? "Registering..." : "REGISTER"}
+              </button>
+            </form>
+
+            <p className="mt-4 flex justify-center items-center gap-2">
+              Already&nbsp;have&nbsp;an&nbsp;account?
+              <a
+                href="/login"
+                className="border border-pink-400 text-pink-400 px-3 py-1 rounded-md hover:bg-pink-400 hover:text-white transition-all"
               >
                 Login
-              </button>
-            </div>
-          </form>
-        </div>
-
-        {/* Right Panel */}
-        <div
-          className="hidden lg:flex lg:w-1/2 items-center justify-center text-white text-center p-10"
-          style={{
-            background: "linear-gradient(to right, #ff512f, #dd2476)",
-          }}
-        >
-          <div>
-            <h3 className="text-2xl font-bold mb-4">Join One Stop Tracker</h3>
-            <p className="text-sm">
-              Get started with a smarter way to track your tasks, goals, and analytics in one place.
+              </a>
             </p>
-          </div>
+          </>
+        )}
+      </div>
+
+      <div className="hidden md:flex md:w-1/2 lg:w-3/5 justify-center items-center p-10 font-poppins">
+        <div className="max-w-lg text-right">
+          <h2 className="text-5xl font-extrabold leading-tight mb-6 tracking-tight">
+            Track<span className="text-white"> , </span>Record &<br />
+            <span className="text-white">Visualize </span>
+            <span className="text-cyan-400 italic font-['Oooh_Baby'] text-6xl leading-snug tracking-wide">
+              Your Life
+            </span>
+          </h2>
+          <p className="text-gray-300 text-base mt-6 leading-relaxed tracking-wide">
+            <span className="block mb-1">Your Life, Your Data – From sleep to self-care, </span>
+            <span className="block">build custom trackers and watch your progress come to life.</span>
+          </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
