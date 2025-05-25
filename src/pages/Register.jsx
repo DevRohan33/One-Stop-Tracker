@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/superbaseClient";
-import { toast } from "react-hot-toast"; // Install with: npm install react-hot-toast
+import { toast } from "react-hot-toast";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -20,6 +20,15 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    if (registrationSuccess) {
+      const timer = setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [registrationSuccess, navigate]);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -34,28 +43,18 @@ export default function RegisterPage() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: {
-            full_name: name, // Changed to full_name as it's more standard
-          },
+          data: { full_name: name }
         },
       });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
-      // Registration successful
       toast.success("Registration successful! Please check your email to confirm your account.");
       setRegistrationSuccess(true);
-      
-      // Auto-navigate to login after 3 seconds
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
 
     } catch (error) {
       setError(error.message);
@@ -69,7 +68,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center p-10 bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
       <div className="w-full max-w-[480px] bg-[rgba(121, 33, 141, 0.49)] p-12 pt-16 pb-10 rounded-2xl shadow-xl backdrop-blur-lg flex flex-col justify-center items-center">
         <h1 className="text-center text-4xl tracking-widest font-semibold mb-10 text-white">UniTrax</h1>
-        
+
         {registrationSuccess ? (
           <div className="text-center">
             <h2 className="text-2xl font-bold text-green-400 mb-4">Registration Successful!</h2>
@@ -87,6 +86,7 @@ export default function RegisterPage() {
                 <input
                   name="name"
                   type="text"
+                  autoComplete="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter your Name"
@@ -98,6 +98,7 @@ export default function RegisterPage() {
                 <input
                   name="email"
                   type="email"
+                  autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
@@ -109,6 +110,7 @@ export default function RegisterPage() {
                 <input
                   name="password"
                   type="password"
+                  autoComplete="new-password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Enter your password"
@@ -120,7 +122,7 @@ export default function RegisterPage() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !formData.name || !formData.email || !formData.password}
                 className="mt-8 w-full py-3 rounded-lg font-bold text-white bg-gradient-to-r from-cyan-400 to-fuchsia-600 hover:from-cyan-300 hover:to-fuchsia-500 transition-all shadow-lg disabled:opacity-70"
               >
                 {loading ? "Registering..." : "REGISTER"}

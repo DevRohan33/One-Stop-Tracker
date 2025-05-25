@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/superbaseClient";
 import { toast } from "react-hot-toast";
 
-const LoginPage = () => {
+const LoginPage = ({ onLogin }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -39,9 +39,9 @@ const LoginPage = () => {
         throw error;
       }
 
-      // Login successful
       toast.success("Login successful!");
-      navigate('/');
+      onLogin(); // ✅ trigger auth in App.jsx
+      navigate("/dashboard");
 
     } catch (error) {
       setError(error.message);
@@ -53,7 +53,6 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-10 bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
-      {/* Login Form Section */}
       <div className="w-full max-w-[480px] bg-[rgba(121, 33, 141, 0.49)] p-12 pt-16 pb-10 rounded-2xl shadow-xl backdrop-blur-lg flex flex-col justify-center items-center">
         <h1 className="text-center text-4xl tracking-widest font-semibold mb-10 text-white">UniTrax</h1>
 
