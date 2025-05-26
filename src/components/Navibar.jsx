@@ -213,8 +213,8 @@ const Navbar = ({ parameters = [] }) => {
                 <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
               </button>
 
-              {/* Profile Dropdown */}
-              <div className="relative">
+              {/* Profile Dropdown - Hidden on mobile */}
+              <div className="relative hidden md:block">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-2 p-2 rounded-lg text-white hover:bg-white/10 transition-colors duration-200"
@@ -280,10 +280,22 @@ const Navbar = ({ parameters = [] }) => {
 
         {/* Mobile Menu */}
         <div className={`lg:hidden overflow-hidden transition-all duration-300 ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="px-4 py-4 bg-gray-800 border-t border-gray-700">
-            
+            {/* User Info in Mobile Menu */}
+            {user && (
+              <div className="flex items-center space-x-3 mb-4 p-3 bg-gray-700 rounded-lg">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="font-medium text-white">{user.name}</div>
+                  <div className="text-xs text-gray-300">{user.email}</div>
+                </div>
+              </div>
+            )}
+
             {/* Mobile Navigation */}
             <div className="space-y-2">
               {navigation.map((item) => {
@@ -308,19 +320,21 @@ const Navbar = ({ parameters = [] }) => {
             </div>
 
             {/* Mobile Profile Links */}
-            <div className="mt-4 pt-4 border-t border-gray-700">
+            <div className="mt-4 pt-4 border-t border-gray-700 space-y-2">
               {profileMenuItems.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <Link
+                  <button
                     key={item.name}
-                    to={item.href}
-                    onClick={item.onClick}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white transition-colors duration-200"
+                    onClick={(e) => {
+                      if (item.onClick) item.onClick();
+                      setIsOpen(false);
+                    }}
+                    className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Icon className="w-5 h-5" />
                     <span>{item.name}</span>
-                  </Link>
+                  </button>
                 );
               })}
             </div>

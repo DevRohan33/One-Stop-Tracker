@@ -12,7 +12,7 @@ export default function AboutPage() {
             About One Stop Tracker
           </h1>
           <p className="text-lg leading-relaxed text-gray-200">
-            Welcome to <span className="text-purple-400 font-semibold">One Stop Tracker</span> — your all-in-one
+            Welcome to <span className="text-purple-400 font-semibold">UniTrax</span> — your all-in-one
             solution for monitoring parameters, managing tasks, and staying organized in a clean, efficient way.
           </p>
           <p className="mt-4 text-gray-300">
@@ -22,14 +22,13 @@ export default function AboutPage() {
           <div className="mt-6 border-t border-purple-500 pt-4 text-sm text-gray-400">
             Developed by{" "}
             <a
-              href="https://rohan-beryl.vercel.app/"
+              href="https://www.linkedin.com/company/design-intelligence-llp/"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-purple-300 hover:underline"
             >
-              Rohan
+              Design Intelligence
             </a>{" "}
-            at <span className="font-semibold text-white">Design Intelligence</span>
           </div>
 
           {/* Social Icons */}

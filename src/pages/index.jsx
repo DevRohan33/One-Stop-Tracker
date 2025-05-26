@@ -115,7 +115,7 @@ export default function IndexPage({ parameters, onAddParameter }) {
       };
     }
     
-    return null; // Return null for no data state
+    return null;
   };
 
   const chartOptions = {
@@ -207,7 +207,7 @@ export default function IndexPage({ parameters, onAddParameter }) {
                   key={param.id}
                   className="bg-gradient-to-br from-gray-800/50 to-gray-900/80 backdrop-blur-sm border border-gray-700 hover:border-purple-500 rounded-xl p-4 md:p-6 w-full h-64 md:h-80 flex flex-col justify-between shadow-xl hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
                 >
-                  {/* Animated background glow */}
+                  
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-900/0 via-purple-900/5 to-blue-900/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   
                   {/* Header section */}
